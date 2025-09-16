@@ -1,10 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+
+// function to check if binary file exists
+bool fileExists(const char *filename) {
+    FILE *fptr = fopen(filename, "rb");
+    if(fptr != NULL){
+        fclose(fptr);
+        return true;
+    }
+    return false;
+}
 
 // student record structure
 struct student_record
 {
-    int studentID;
+    char studentID[20];
     char studentName[50];
     char emailID[50];
     char courseID[50];
@@ -16,6 +27,7 @@ int main(void)
     // variable declarations
     int menuSelection;
     FILE *fptr;
+    char filename[] = "student_records.dat";
 
     do
     {
@@ -39,26 +51,48 @@ int main(void)
 
         case 1: // CREATE FILE
             
-            // check if file already exists
-            fptr = fopen("student-records.dat", "rb");
-            
-            if (fptr == NULL)
-            {
-                printf("Creating file 'student-records.dat'");
-                fptr = fopen("student-records.dat", "wb+");
-                fclose(fptr);
-            }
-            else
-            {
-                printf("File 'student-records.dat' already exists.\n");
+            // CHECK IF FILE EXCISTS
+            if(fileExists(filename)){
+                printf("File '%s' already exists.\n", filename);
+            }else{
+                printf("Creating file '%s'", filename);
+                fptr = fopen(filename, "rb");
                 fclose(fptr);
             }
             break;
 
-        case 2: // ADD RECORD TO FILE
+        case 2: // ADD RECORD TO BINARY FILE
+            if(!fileExists(filename)){
+                printf("File DNE. Create file first using menu option 1.\n");
+            }else{
+                // CREATE NEW RECORD
+                struct student_record record;
+
+                printf("Enter student ID: ");
+                scanf("%s", record.studentID);
+
+                printf("Enter student name: ");
+                scanf("%s", record.studentName);
+
+                printf("Enter student email ID: ");
+                scanf("%s", record.emailID);
+
+                printf("Enter course ID: ");
+                scanf("%s", record.courseID);
+
+                printf("Enter grade: ");
+                scanf("%s", record.grade);
+
+                // OPEN BINARY FILE IN APPEND MODE
+                fptr = fopen(filename, "ab");
+
+                // WRITE RECORD TO FILE
+                fwrite(&record, sizeof(record), 1, fptr);
+                fclose(fptr);
+            }
             break;
-        case 3:
-            // display file contents
+
+        case 3: // DISPLAY BINARY FILE CONTENTS
             break;
         case 4:
             // seek a record
