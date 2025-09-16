@@ -46,6 +46,7 @@ int main(void)
             {
                 printf("Creating file 'student-records.dat'");
                 fptr = fopen("student-records.dat", "wb+");
+                fclose(fptr);
             }
             else
             {
