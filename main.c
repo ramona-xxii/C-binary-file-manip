@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
     //student record structure
     struct student_record
@@ -29,6 +30,37 @@ int main(void){
 
     // get & store user's choice
     scanf("%d", &choice);
+
+    // determine choice made
+    switch(choice) {
+        case 1:
+            // create file
+            printf("Creating file...\n");
+            fptr = fopen("records.dat", "ab");
+            break;
+        case 2:
+            // add record to file
+            break;
+        case 3:
+            // display file contents
+            break;
+        case 4:
+            // seek a record
+            break;
+        case 5:
+            // update a record
+            break;
+        case 6:
+            // delete a record
+            break;
+        case 7:
+            // exit program
+            printf("Exiting program.");
+            exit(0);
+        default:
+            printf("Please enter a valid choice...");
+
+    }
 
     
     
