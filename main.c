@@ -55,13 +55,14 @@ int main(void)
             if(fileExists(filename)){
                 printf("File '%s' already exists.\n", filename);
             }else{
-                printf("Creating file '%s'", filename);
-                fptr = fopen(filename, "rb");
+                printf("Creating file '%s'\n", filename);
+                fptr = fopen(filename, "wb");
                 fclose(fptr);
             }
             break;
 
         case 2: // ADD RECORD TO BINARY FILE
+
             if(!fileExists(filename)){
                 printf("File DNE. Create file first using menu option 1.\n");
             }else{
@@ -93,9 +94,19 @@ int main(void)
             break;
 
         case 3: // DISPLAY BINARY FILE CONTENTS
+            if(!fileExists(filename)){
+                printf("File DNE. Create file first using menu option 1.\n");
+            }else{
+                fptr = fopen(filename, "rb");
+                struct student_record record;
+                while(fread(&record, sizeof(record), 1, fptr) == 1){
+                    printf("Student ID: %s\nStudent name: %s\nEmail ID: %s\nCourse ID: %s\nGrade: %s\n", 
+                        record.studentID, record.studentName, record.emailID, record.courseID, record.grade);
+                }
+                fclose(fptr);
+            }
             break;
-        case 4:
-            // seek a record
+        case 4: // SEEK A RECORD
             break;
         case 5:
             // update a record
