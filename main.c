@@ -1,11 +1,20 @@
 #include <stdio.h>
+
+    //student record structure
+    struct student_record
+    {
+        int studentID;
+        char studentName[50]; 
+        char emailID[50];
+        char courseID[50];
+        char grade[3];
+    };
+
 int main(void){
 
     // variable declarations
     int choice;
     FILE *fptr;
-
-    //student record structure
 
     // display main menu
     printf("\t\tMAIN MENU\n"
