@@ -35,8 +35,8 @@ int main(void)
     do
     {
         // display main menu
-        printf("\t\tMAIN MENU\n"
-               "\t\t---------"
+        printf("\n\t\tMAIN MENU\n"
+               "\t\t---------\n"
                "1. Create the binary file\n"
                "2. Add a record to the file\n"
                "3. Display the contents of the file\n"
@@ -157,7 +157,6 @@ int main(void)
                 {
                     printf("- %s\n", record.studentID);
                 }
-                fclose(fptr);
 
                 // SEEK BY STUDENT ID
                 printf("\tEnter student ID to search: ");
