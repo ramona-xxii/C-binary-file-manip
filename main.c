@@ -272,15 +272,45 @@ int main(void)
                 char searchByID[20];
                 bool IDfound = false;
                 struct student_record record;
+                fptr = fopen(filename, "rb");
+
+                // show list of students by IDs
+                printf("List of IDs in File:\n");
+                while (fread(&record, sizeof(record), 1, fptr) == 1)
+                {
+                    printf("- %s\n", record.studentID);
+                }
+                rewind(fptr);
+
+                printf("=> Which record would you like to delete: ");
+                scanf("%s", searchByID);
 
                 // temp file to store records minus deleted one
-                fptr = fopen(filename, "rb");
                 FILE *tempfptr = fopen("temp.dat", "wb");
+
+                while (fread(&record, sizeof(record), 1, fptr) == 1)
+                {
+                    if (strcmp(record.studentID, searchByID) != 0)
+                    {
+                        // write record to temp file
+                        fwrite(&record, sizeof(record), 1, tempfptr);
+                    }
+                    if(strcmp(record.studentID, searchByID) == 0){
+                        IDfound = true;
+                    }
+                    
+                }
+                fclose(fptr);
+                fclose(tempfptr);
+
+                // replace old file with new file
+                remove(filename);
+                rename("temp.dat", filename);
             }
 
             break;
         case 7: // EXIT PROGRAM
-            
+
             // delete binary file
             remove(filename);
 
