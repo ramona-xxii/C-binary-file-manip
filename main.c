@@ -19,9 +19,9 @@ bool fileExists(const char *filename)
 struct student_record
 {
     char studentID[20];
-    char studentName[50];
+    char studentName[30];
     char emailID[50];
-    char courseID[50];
+    char courseID[10];
     char grade[3];
 };
 
@@ -54,6 +54,9 @@ int main(void)
         {
 
         case 1: // CREATE FILE
+            
+            printf("\n1. Create File\n");
+            printf("--------------\n");
 
             // CHECK IF FILE EXCISTS
             if (fileExists(filename))
@@ -70,6 +73,9 @@ int main(void)
             break;
 
         case 2: // ADD RECORD TO BINARY FILE
+            
+        printf("\n2. Add Record to File\n");
+        printf("---------------------\n");
 
             if (!fileExists(filename))
             {
@@ -79,8 +85,6 @@ int main(void)
             {
                 // CREATE NEW RECORD
                 struct student_record record;
-                printf("\tCreate a student record\n");
-                printf("\t-----------------------");
 
                 printf("=> Enter student ID: ");
                 scanf("%s", record.studentID);
@@ -108,6 +112,10 @@ int main(void)
 
         case 3: // DISPLAY BINARY FILE CONTENTS
 
+            printf("\n3. Display File Contents\n");
+            printf("------------------------\n");
+
+            // CHECK IF FILE EXISTS
             if (!fileExists(filename))
             {
                 printf("ERROR: File DNE. Create file first using menu option 1.\n");
@@ -127,6 +135,10 @@ int main(void)
 
         case 4: // SEEK A RECORD
 
+            printf("\n4. Seek A Record\n");
+            printf("----------------\n");
+
+            // CHECK IF FILE EXISTS
             if (!fileExists(filename))
             {
                 printf("ERROR: File DNE. Create file first using menu option 1.\n");
@@ -134,13 +146,23 @@ int main(void)
             else
             {
                 char searchByID[20];
-                struct student_record record;
                 bool IDfound = false;
 
-                printf("Enter student ID to search: ");
-                scanf("%s", searchByID);
-
+                struct student_record record;
                 fptr = fopen(filename, "rb");
+
+                // DISPLAY ID LIST
+                printf("=> IDs in File:\n");
+                while (fread(&record, sizeof(record), 1, fptr) == 1)
+                {
+                    printf("- %s\n", record.studentID);
+                }
+                fclose(fptr);
+
+                // SEEK BY STUDENT ID
+                printf("\tEnter student ID to search: ");
+                scanf("%s", searchByID);
+                rewind(fptr);
 
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
