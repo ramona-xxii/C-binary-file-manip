@@ -31,6 +31,7 @@ int main(void)
     int menuSelection;
     FILE *fptr;
     char filename[] = "student_records.dat";
+    char errorFileDNE[] = "ERROR: File DNE. Create file first using menu option 1.";
 
     do
     {
@@ -58,13 +59,15 @@ int main(void)
             printf("\nYour choice: 1. Create File\n");
             printf("-----------------------------\n");
 
-            // CHECK IF FILE EXCISTS
+            // check if file exists before creating
             if (fileExists(filename))
             {
+                // display error message if file already exists
                 printf("ERROR: File '%s' already exists!!\n", filename);
             }
             else
             {
+                // create binary file if file DNE
                 printf("\tCreating file '%s'...\n", filename);
                 fptr = fopen(filename, "wb");
                 fclose(fptr);
@@ -79,11 +82,12 @@ int main(void)
 
             if (!fileExists(filename))
             {
-                printf("ERROR: File DNE. Create file first using menu option 1.\n");
+                // display error message if file DNE
+                printf("%s\n", errorFileDNE);
             }
             else
             {
-                // CREATE NEW RECORD
+                // create new record
                 struct student_record record;
                 printf("Enter Record Info Below:\n");
 
@@ -102,10 +106,10 @@ int main(void)
                 printf("=> Enter grade: ");
                 scanf("%s", record.grade);
 
-                // OPEN BINARY FILE IN APPEND MODE
+                // open file in append/binary mode
                 fptr = fopen(filename, "ab");
 
-                // WRITE RECORD TO FILE
+                // write record to file
                 fwrite(&record, sizeof(record), 1, fptr);
                 fclose(fptr);
             }
@@ -116,10 +120,10 @@ int main(void)
             printf("\nYour choice: 3. Display File Contents\n");
             printf("-------------------------------------\n");
 
-            // CHECK IF FILE EXISTS
             if (!fileExists(filename))
             {
-                printf("ERROR: File DNE. Create file first using menu option 1.\n");
+                // dislpay error message if file DNE
+                printf("%s\n", errorFileDNE);
             }
             else
             {
@@ -142,7 +146,7 @@ int main(void)
             // CHECK IF FILE EXISTS
             if (!fileExists(filename))
             {
-                printf("ERROR: File DNE. Create file first using menu option 1.\n");
+                printf("%s\n", errorFileDNE);
             }
             else
             {
@@ -152,14 +156,14 @@ int main(void)
                 struct student_record record;
                 fptr = fopen(filename, "rb");
 
-                // DISPLAY ID LIST
+                // display list of all IDs in file
                 printf("List of IDs in File:\n");
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
                     printf("- %s\n", record.studentID);
                 }
 
-                // SEEK BY STUDENT ID
+                // seek by student ID
                 printf("\n=> Enter student ID to seek record: ");
                 scanf("%s", searchByID);
                 rewind(fptr);
@@ -184,8 +188,19 @@ int main(void)
             }
             break;
 
-        case 5:
-            // update a record
+        case 5: // UPDATE A RECORD
+
+            printf("\nYour choice: 5. Update A Record\n");
+            printf("-------------------------------\n");
+
+            // check if file exists
+            if (!fileExists(filename))
+            {
+                printf("%s\n", errorFileDNE);
+            }
+            else{
+
+            }
             break;
         case 6:
             // delete a record
