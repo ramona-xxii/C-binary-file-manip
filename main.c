@@ -33,6 +33,11 @@ int main(void)
     char filename[] = "student_records.dat";
     char errorFileDNE[] = "ERROR: File DNE. Create file first using menu option 1.";
 
+    // remove local copies if any before execution
+    if(fileExists(filename)){
+        remove(filename);
+    }
+
     do
     {
         // display main menu
@@ -68,10 +73,10 @@ int main(void)
             else
             {
                 // create binary file if file DNE
-                printf("\tCreating file '%s'...\n", filename);
+                printf("=> Creating file '%s'...\n", filename);
                 fptr = fopen(filename, "wb");
                 fclose(fptr);
-                printf("\tBinary file created.\n");
+                printf("=> Binary file created.\n");
             }
             break;
 
@@ -173,7 +178,7 @@ int main(void)
                 {
                     if (strcmp(record.studentID, searchByID) == 0)
                     {
-                        printf("Record of student ID %s:\n", searchByID);
+                        printf("\nRecord of student ID %s:\n", searchByID);
                         printf("\n\tStudent ID: %s\n\tStudent name: %s\n\tEmail ID: %s\n\tCourse ID: %s\n\tGrade: %s\n",
                                record.studentID, record.studentName, record.emailID, record.courseID, record.grade);
                         IDfound = true;
@@ -223,7 +228,7 @@ int main(void)
                 {
                     if (strcmp(record.studentID, searchByID) == 0)
                     {
-                        printf("Enter new record info for student ID %s\n:", searchByID);
+                        printf("\nEnter new record info for student ID: %s\n", searchByID);
 
                         printf("=> Enter new student ID: ");
                         scanf("%s", record.studentID);
@@ -244,7 +249,7 @@ int main(void)
                         fseek(fptr, -sizeof(record), SEEK_CUR);
                         fwrite(&record, sizeof(record), 1, fptr);
 
-                        printf("Record updated.\n");
+                        printf("\nRecord updated.\n");
 
                         IDfound = true;
                         break;
@@ -269,34 +274,35 @@ int main(void)
             }
             else
             {
-                char searchByID[20];
+                char searchByName[30];
                 bool IDfound = false;
                 struct student_record record;
                 fptr = fopen(filename, "rb");
 
                 // show list of students by IDs
-                printf("List of IDs in File:\n");
+                printf("List of Names in File:\n");
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
-                    printf("- %s\n", record.studentID);
+                    printf("- %s\n", record.studentName);
                 }
                 rewind(fptr);
 
                 printf("=> Which record would you like to delete: ");
-                scanf("%s", searchByID);
+                scanf("%s", searchByName);
 
                 // temp file to store records minus deleted one
                 FILE *tempfptr = fopen("temp.dat", "wb");
 
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
-                    if (strcmp(record.studentID, searchByID) != 0)
+                    if (strcmp(record.studentName, searchByName) != 0)
                     {
                         // write record to temp file
                         fwrite(&record, sizeof(record), 1, tempfptr);
                     }
-                    if(strcmp(record.studentID, searchByID) == 0){
+                    if(strcmp(record.studentName, searchByName) == 0){
                         IDfound = true;
+                        printf("Record for %s deleted.\n", searchByName);
                     }
                     
                 }
@@ -314,7 +320,7 @@ int main(void)
             // delete binary file
             remove(filename);
 
-            printf("\n--- Exiting program. Goodbye! ---");
+            printf("\n--- Exiting program. Goodbye! ---\n");
             break;
 
         default:
