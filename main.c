@@ -55,7 +55,7 @@ int main(void)
         {
 
         case 1: // CREATE FILE
-            
+
             printf("\nYour choice: 1. Create File\n");
             printf("-----------------------------\n");
 
@@ -76,9 +76,9 @@ int main(void)
             break;
 
         case 2: // ADD RECORD TO BINARY FILE
-            
-        printf("\nYour choice: 2. Add Record to File\n");
-        printf("----------------------------------\n");
+
+            printf("\nYour choice: 2. Add Record to File\n");
+            printf("----------------------------------\n");
 
             if (!fileExists(filename))
             {
@@ -168,6 +168,7 @@ int main(void)
                 scanf("%s", searchByID);
                 rewind(fptr);
 
+                // read one record at a time while there is a record to read
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
                     if (strcmp(record.studentID, searchByID) == 0)
@@ -183,7 +184,7 @@ int main(void)
                 {
                     printf("ERROR: No record found for student ID: %s\n", searchByID);
                 }
-                
+
                 fclose(fptr);
             }
             break;
@@ -198,19 +199,96 @@ int main(void)
             {
                 printf("%s\n", errorFileDNE);
             }
-            else{
+            else
+            {
+                char searchByID[20];
+                bool IDfound = false;
 
+                struct student_record record;
+                fptr = fopen(filename, "rb+");
+
+                // display list of students by ID
+                printf("List of IDs in File:\n");
+                while (fread(&record, sizeof(record), 1, fptr) == 1)
+                {
+                    printf("- %s\n", record.studentID);
+                }
+                rewind(fptr);
+
+                printf("=> Which record would you like to modify: ");
+                scanf("%s", searchByID);
+
+                // read one record at a time while there is a record to read
+                while (fread(&record, sizeof(record), 1, fptr) == 1)
+                {
+                    if (strcmp(record.studentID, searchByID) == 0)
+                    {
+                        printf("Enter new record info for student ID %s\n:", searchByID);
+
+                        printf("=> Enter new student ID: ");
+                        scanf("%s", record.studentID);
+
+                        printf("=> Enter new student name: ");
+                        scanf("%s", record.studentName);
+
+                        printf("=> Enter new student email ID: ");
+                        scanf("%s", record.emailID);
+
+                        printf("=> Enter new course ID: ");
+                        scanf("%s", record.courseID);
+
+                        printf("=> Enter new grade: ");
+                        scanf("%s", record.grade);
+
+                        // move pointer back 1 record to overwrite it
+                        fseek(fptr, -sizeof(record), SEEK_CUR);
+                        fwrite(&record, sizeof(record), 1, fptr);
+
+                        printf("Record updated.\n");
+
+                        IDfound = true;
+                        break;
+                    }
+                }
+                if (!IDfound)
+                {
+                    printf("No record for ID %s found.\n", searchByID);
+                }
+                fclose(fptr);
             }
             break;
-        case 6:
-            // delete a record
+        case 6: // DELETE A RECORD
+
+            printf("\nYour choice: 6. Delete A Record\n");
+            printf("-------------------------------\n");
+
+            // check if file exists
+            if (!fileExists(filename))
+            {
+                printf("%s\n", errorFileDNE);
+            }
+            else
+            {
+                char searchByID[20];
+                bool IDfound = false;
+                struct student_record record;
+
+                // temp file to store records minus deleted one
+                fptr = fopen(filename, "rb");
+                FILE *tempfptr = fopen("temp.dat", "wb");
+            }
+
             break;
-        case 7:
-            // EXIT PROGRAM
-            printf("Exiting program. Goodbye!");
+        case 7: // EXIT PROGRAM
+            
+            // delete binary file
+            remove(filename);
+
+            printf("\n--- Exiting program. Goodbye! ---");
             break;
+
         default:
-            printf("Please enter a valid choice... ");
+            printf("ERROR: Please enter a valid choice...\n");
         }
 
     } while (menuSelection != 7);
