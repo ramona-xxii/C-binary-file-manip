@@ -55,8 +55,8 @@ int main(void)
 
         case 1: // CREATE FILE
             
-            printf("\n1. Create File\n");
-            printf("--------------\n");
+            printf("\nYour choice: 1. Create File\n");
+            printf("-----------------------------\n");
 
             // CHECK IF FILE EXCISTS
             if (fileExists(filename))
@@ -65,26 +65,27 @@ int main(void)
             }
             else
             {
-                printf("Creating file '%s'...\n", filename);
+                printf("\tCreating file '%s'...\n", filename);
                 fptr = fopen(filename, "wb");
                 fclose(fptr);
-                printf("Binary file created.\n");
+                printf("\tBinary file created.\n");
             }
             break;
 
         case 2: // ADD RECORD TO BINARY FILE
             
-        printf("\n2. Add Record to File\n");
-        printf("---------------------\n");
+        printf("\nYour choice: 2. Add Record to File\n");
+        printf("----------------------------------\n");
 
             if (!fileExists(filename))
             {
-                printf("File DNE. Create file first using menu option 1.\n");
+                printf("ERROR: File DNE. Create file first using menu option 1.\n");
             }
             else
             {
                 // CREATE NEW RECORD
                 struct student_record record;
+                printf("Enter Record Info Below:\n");
 
                 printf("=> Enter student ID: ");
                 scanf("%s", record.studentID);
@@ -112,8 +113,8 @@ int main(void)
 
         case 3: // DISPLAY BINARY FILE CONTENTS
 
-            printf("\n3. Display File Contents\n");
-            printf("------------------------\n");
+            printf("\nYour choice: 3. Display File Contents\n");
+            printf("-------------------------------------\n");
 
             // CHECK IF FILE EXISTS
             if (!fileExists(filename))
@@ -135,8 +136,8 @@ int main(void)
 
         case 4: // SEEK A RECORD
 
-            printf("\n4. Seek A Record\n");
-            printf("----------------\n");
+            printf("\nYour choice: 4. Seek A Record\n");
+            printf("-----------------------------\n");
 
             // CHECK IF FILE EXISTS
             if (!fileExists(filename))
@@ -152,14 +153,14 @@ int main(void)
                 fptr = fopen(filename, "rb");
 
                 // DISPLAY ID LIST
-                printf("=> IDs in File:\n");
+                printf("List of IDs in File:\n");
                 while (fread(&record, sizeof(record), 1, fptr) == 1)
                 {
                     printf("- %s\n", record.studentID);
                 }
 
                 // SEEK BY STUDENT ID
-                printf("\tEnter student ID to search: ");
+                printf("\n=> Enter student ID to seek record: ");
                 scanf("%s", searchByID);
                 rewind(fptr);
 
@@ -176,7 +177,7 @@ int main(void)
                 }
                 if (!IDfound)
                 {
-                    printf("No record found for student ID: %s\n", searchByID);
+                    printf("ERROR: No record found for student ID: %s\n", searchByID);
                 }
                 
                 fclose(fptr);
